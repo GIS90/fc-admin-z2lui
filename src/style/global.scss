@@ -1,0 +1,124 @@
+// ======================================= 自创UI样式 =======================================
+// table操作ICON样式
+.table-handle-icon {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.table-handle-icon:hover{
+  color: #42B984;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+// margin
+.margin-left-25px {
+  margin-left: 25px !important;
+}
+
+// margin-right-15px
+.margin-right-15px {
+  margin-right: 15px !important;
+}
+
+// Table操作按钮
+.table-handle-button {
+  margin-right: 5px !important;
+}
+
+// Table查询条件
+.table-search {
+  margin: 0 20px 20px 20px;
+}
+
+// ======================================= 覆盖原Element-Plus UI样式 =======================================
+// ------------------------- dialog -------------------------
+// 去掉默认el-dialog内置的padding，用于自定义样式
+.el-dialog {
+  --el-dialog-padding-primary: 0 !important;
+}
+
+// 内距参数
+$my-dialog-padding: 16px;
+
+// header
+.my-dialog-header {
+  display: flex;
+  flex-direction: row;
+  padding: $my-dialog-padding;
+  background: #eee;
+  border-bottom: 2px solid #CCCCCC;
+}
+
+.my-dialog-header-title {
+  font-size: 1.4rem;
+}
+
+.my-dialog-header-icon {
+  margin-left: auto;
+}
+
+// body
+.my-dialog-body {
+  font-size: 1.3rem;
+  line-height: 2;
+  padding: $my-dialog-padding;
+}
+
+// footer
+.my-dialog-footer {
+  padding: $my-dialog-padding;
+  border-top: 1px solid #e8eaec;
+}
+
+//------------------------- el-divider -------------------------
+.el-divider__text {
+  background-color: #34BFA3 !important;
+  padding: 0 15px !important;
+  color: #FFFFFF !important;
+  font-size: 13px !important;
+}
+
+//------------------------- Select-Option -------------------------
+.el-select-key {
+  float: left;
+}
+
+.el-select-value {
+  float: right;
+  color: var(--el-text-color-secondary);
+}
+
+// ======================================= Transition动画效果 =======================================
+//------------------------- T > 过滤条件 -------------------------
+.t-filter-enter-active {
+  transition: all 1.2s ease;
+}
+.t-filter-leave-active {
+  transition: all 0.8s ease;
+}
+.t-filter-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.t-filter-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+//------------------------- T-g > 任务中心list-card -------------------------
+.tg-task-card-enter-active {
+  animation: fadeInUp 1.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
