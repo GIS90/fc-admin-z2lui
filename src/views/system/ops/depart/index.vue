@@ -63,12 +63,13 @@
             @node-click="nodeClick"
             @check="nodeCheck"
             @node-drop="nodeDrag"
+            @node-expand="nodeExpand"
         >
           <template #default="{ node, data }">
             <div class="custom-tree-node">
               <span>{{ node.label }}</span>
               <div>
-                <el-button :disabled="node.disabled" type="primary" link @click="nodeAppend(data)">
+                <el-button :disabled="node.disabled" type="primary" link @click="nodeAppend(node, data)">
                   新增
                 </el-button>
                 <el-button type="primary" link @click="nodeEdit(data)">
@@ -96,7 +97,7 @@
     </el-row>
 
     <!--新增-->
-    <Add v-model:visible="addVisible" :md5="selectNodeMd5" @fetch-tree-data="fetchTreeData" />
+    <Add v-model:visible="addVisible" :md5="selectNodeMd5" @node-append-tree="nodeAppendTree" />
 
     <!--批量删除-->
     <fc-batch-delete v-model:visible="batchDeleteVisible" :api="apiName" :md5List="treeCheckedKeys" @reFetchTableData="fetchTreeData"/>
@@ -126,6 +127,7 @@ const selectNodeMd5 = ref('');
 const addVisible = ref(false); // 新增
 const editVisible = ref(false); // 编辑
 const batchDeleteVisible = ref(false);
+const addNodeParent = ref<Node | null>(null);
 
 // Tree属性
 const treeConfigField = reactive({
@@ -156,7 +158,9 @@ const fetchTreeData = async () => {
   if (response.data) {
     const res = response.data as { data: DepartmentNode[], check: string[], expand: string[] }; // declare
     treeData.value = res.data;
-    treeExpandedKeys.value = res.expand;
+    if (treeExpandedKeys.value.length === 0) {
+      treeExpandedKeys.value = res.expand;
+    }
     treeCheckedKeys.value = []; // 刷新为空
   }
 }
@@ -235,9 +239,26 @@ const nodeDrag = (draggingNode: Node, dropNode: Node, dropType: NodeDropType, ev
 
 };
 
-const nodeAppend = (data: DepartmentNode) => {
+const nodeExpand = (data: DepartmentNode) => {
+  if (!treeExpandedKeys.value.includes(data.md5)) {
+    treeExpandedKeys.value.push(data.md5);
+  } else {
+    treeExpandedKeys.value = treeExpandedKeys.value.filter(key => key !== data.md5);
+  }
+}
+
+const nodeAppend = (node: Node, data: DepartmentNode) => {
   addVisible.value = true;
   selectNodeMd5.value = data.md5;
+  addNodeParent.value = node;
+};
+
+const nodeAppendTree = (data: DepartmentNode) => {
+  if (!addNodeParent.value.data.children) {
+    addNodeParent.value.data.children = []; // 或使用 Vue.set/Vue3 的 reactive 方式
+  }
+  addNodeParent.value.data.children.push(data);
+  treeData.value = [...treeData.value]
 };
 
 const nodeEdit = (data: DepartmentNode) => {

@@ -144,7 +144,7 @@ const dgField = {...dialogField, ...dgConfigField}; // DIALOG属性
 const introductionSize = ref({minRows: 3, maxRows: 4});
 const fullView = ref(dgField.fullScreen); // 全屏控制
 const fullViewText = ref('全屏');
-const emit = defineEmits(['update:visible', 'fetchTreeData']);
+const emit = defineEmits(['update:visible', 'nodeAppendTree']);
 const btnDisabled = ref(false); // 禁用
 const btnLoading = ref(false); // 加载中
 const userOption = ref<OptionEnumModel[]>([]);
@@ -236,14 +236,14 @@ const confirm = async (formEl: FormInstance | undefined) => {
       btnDisabled.value = true;
       btnLoading.value = true;
 
-      SysOpsDepartAddApi(ruleForm).then(() => {
+      SysOpsDepartAddApi(ruleForm).then((response) => {
         ElNotification({
           title: '提示',
           message: '新增成功',
           type: 'success'
         });
         closeDialog();
-        emit('fetchTreeData', true);
+        emit('nodeAppendTree', response.data);
       }).finally(() => {
         btnDisabled.value = false;
         btnLoading.value = false;
